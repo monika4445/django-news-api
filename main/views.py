@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.core.paginator import Paginator, Page
+from django.core.paginator import Paginator
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views import View
 from .models import News, Tag
 import logging
@@ -104,3 +105,15 @@ class NewsByTagList(generics.ListAPIView):
         tag = get_object_or_404(Tag, name=tag_name)
         return News.objects.filter(tags=tag)
 
+def like_dislike_news(request, pk):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action in ['like', 'dislike']:
+            news = get_object_or_404(News, pk=pk)
+            if action == 'like':
+                news.likes += 1
+            elif action == 'dislike':
+                news.dislikes += 1
+            news.save()
+            return JsonResponse({'likes': news.likes, 'dislikes': news.dislikes})
+    return JsonResponse({'error': 'Invalid request'})

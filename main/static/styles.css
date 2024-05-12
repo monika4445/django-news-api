@@ -54,4 +54,57 @@
       height: auto;
     }
   }
+
+  /* Styling for like button */
+.like-btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s; /* Add transition effect */
+}
+
+/* Change background color of like button on hover */
+.like-btn:hover {
+  background-color: #45a049; /* Darker green */
+}
+
+/* Styling for dislike button */
+.dislike-btn {
+  background-color: #f44336; /* Red */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s; /* Add transition effect */
+}
+
+/* Change background color of dislike button on hover */
+.dislike-btn:hover {
+  background-color: #d32f2f; /* Darker red */
+}
+
+/* Change background color of like button on click */
+.like-btn.active {
+  background-color: #388e3c; /* Light green */
+}
+
+/* Change background color of dislike button on click */
+.dislike-btn.active {
+  background-color: #d32f2f; /* Light red */
+}
+
   

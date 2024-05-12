@@ -1,3 +1,5 @@
+{% load static %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,6 +66,7 @@
             color: red;
         }
     </style>
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -76,11 +79,12 @@
                 {% endfor %}
             </div>
             <p>{{ news.content }}</p>
-            <div class="like-dislike">
-                <span class="likes">Likes: {{ news.likes }}</span>
-                <span class="dislikes">Dislikes: {{ news.dislikes }}</span>
-            </div>
+            <button class="like-btn" data-id="{{ news.id }}" data-url="/news/{{ news.id }}/like/">Like</button>
+            <span class="likes">{{ news.likes }}</span>
+            <button class="dislike-btn" data-id="{{ news.id }}" data-url="/news/{{ news.id }}/like/">Dislike</button>
+            <span class="dislikes">{{ news.dislikes }}</span>
         </div>
     </div>
+    <script src="{% static 'script.js' %}"></script>
 </body>
 </html>

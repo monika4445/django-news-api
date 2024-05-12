@@ -1,9 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from django.http import JsonResponse
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, Page
+from django.http import HttpResponse
 from django.views import View
 from .models import News, Tag
 import logging
@@ -18,11 +17,15 @@ class NewsListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         news_instance = serializer.save()
 
-        # Handle tags creation or retrieval
         tags_data = self.request.data.get('tags', [])
         for tag_name in tags_data:
-            tag, _ = Tag.objects.get_or_create(name=tag_name)
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            if created:
+                logger.info(f"Created new tag: {tag_name}")
+            else:
+                logger.info(f"Tag already exists: {tag_name}")
             news_instance.tags.add(tag)
+
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -46,10 +49,18 @@ class NewsListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
 
+        # Paginate the queryset
+        paginator = Paginator(queryset, 3)  # Assuming 3 items per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        serializer = self.get_serializer(page_obj, many=True)
+
         context = {
             'news_list': serializer.data,
+            'page_obj': page_obj, 
         }
-        # Render the news.html template with the news queryset and additional context
+
         return render(request, 'news.html', context)
 
     
@@ -62,18 +73,27 @@ class NewsByIdList(View):
             # Increment the views field
             news.views += 1
             news.save()
+            serializer = NewsSerializer(news)
             # Additional context data
             context = {
-                'id': pk,
-                'news': news,
-                'title': news.title,
-                'img_url': news.image.url  
+                'news': serializer.data,
             }
-            return render(request, 'news_card.html', context)
+
+
+
+            return render(request, 'news_article.html', context)
         except News.DoesNotExist as e:
             logger.error(f"News with id {pk} does not exist: {e}")
             # Render the error template without exposing the error message
             return render(request, 'error.html', status=404)
+        
+    def delete(self, request, pk):
+        try:
+            news = News.objects.get(pk=pk)
+            news.delete()
+            return HttpResponse("News deleted successfully", status=204)
+        except News.DoesNotExist:
+            return HttpResponse("News not found", status=404)
         
     
 class NewsByTagList(generics.ListAPIView):

@@ -12,7 +12,6 @@ class News(models.Model):
     content = models.TextField()
     image = models.ImageField(upload_to='news_images/')  # For now I want to store images locally. Later on I can use S3Boto3Storage
                                                          # provided by the 'django-storages' package and configure my project to use Amazon S3
-    image_url = models.URLField(blank=True)  
     tags = models.ManyToManyField(Tag)
     #tags = models.ForeignKey(Tag, on_delete=models.CASCADE) 
     views = models.IntegerField(default=0)

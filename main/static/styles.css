@@ -1,15 +1,17 @@
 /* styles.css */
 .post-card {
     display: flex;
-    align-items: center;
+    justify-content: center; /* Horizontal centering */
+    align-items: center; 
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 20px;
+    margin-left: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
     max-height: 350px;
-    width: 420px;
+    width: 720px;
 
   }
   

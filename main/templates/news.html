@@ -1,4 +1,3 @@
-<!-- news.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,22 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>News</title>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org/dist/htmx.min.js"></script>
+  
+  <script type="text/javascript">
+  var loadedArticles = "{{ news_list|length }}";
+    window.addEventListener('scroll', function() {
+      // Check if scrollbar is at the bottom of the page and if the number of loaded articles is divisible by 3
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && loadedArticles % 3 === 0) {
+        // Trigger AJAX request to load more news
+        var nextPageUrl = "/news/";
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', nextPageUrl);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            // Replace the current content with the loaded content
+            document.body.innerHTML += xhr.responseText;
+            loadedArticles += 3; // Update the number of loaded articles
+          }
+        };
+        xhr.send();
+      }
+    });
+  </script>
 </head>
 <body>
   {% for news in news_list %}
     {% include "./news_card.html" %}
-    {% if forloop.last %}
-      {% if page_obj.has_next %}
-        {% if not page_obj.number|divisibleby:"3" %}
-          <div hx-get="{{ url }}?page={{ page_obj.number|add:1 }}" hx-trigger="revealed" hx-swap="outerHTML" hx-target="this" rel="next"></div>
-        {% endif %}
-        {% if page_obj.number|divisibleby:"3" %}
-          <div class="load-more">
-            <button class="load-more__btn" id="see-more-btn" hx-get="{{ url }}?page={{ page_obj.number|add:1 }}" hx-trigger="click" hx-swap="outerHTML" hx-target=".load-more" rel="next">Load More Posts</button>
-          </div>
-        {% endif %}
-      {% endif %}
-    {% endif %}
   {% endfor %}
 </body>
 </html>

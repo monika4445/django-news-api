@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview Statistics</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        .statistics-title {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .statistics-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .statistics-card h2 {
+            color: #1877f2;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .statistics-card p {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+        .statistics-card ul {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .statistics-card ul li {
+            list-style: none;
+            padding: 5px 0;
+            border-bottom: 1px solid #e4e6eb;
+        }
+        .statistics-card ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="statistics-title">Overview Statistics</h1>
+
+        <div class="statistics-card">
+            <h2>Total Views</h2>
+            <p>{{ total_views }}</p>
+        </div>
+
+        <div class="statistics-card">
+            <h2>Average Views per Article</h2>
+            <p>{{ average_views_per_article }}</p>
+        </div>
+
+        <div class="statistics-card">
+            <h2>Most Viewed Articles</h2>
+            <ul>
+                {% for article in most_viewed_articles %}
+                    <li>{{ article.title }} ({{ article.views }} views)</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="statistics-card">
+            <h2>Least Viewed Articles</h2>
+            <ul>
+                {% for article in least_viewed_articles %}
+                    <li>{{ article.title }} ({{ article.views }} views)</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="statistics-card">
+            <h2>Views for Each News Article</h2>
+            <ul>
+                {% for title, views in articles_views.items %}
+                    <li>{{ title }} ({{ views }} views)</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+</body>
+</html>

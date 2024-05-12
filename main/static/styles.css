@@ -1,0 +1,55 @@
+/* styles.css */
+.post-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    max-height: 350px;
+    width: 420px;
+
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .post-card-img {
+    width: 400pxpx;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  .post-content {
+    padding: 20px;
+    flex: 1;
+  }
+  
+  .post-title {
+    font-size: 1.5rem; /* Adjusted font size */
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .post-readtime {
+    font-size: 1.2rem; /* Adjusted font size */
+    color: #666;
+    margin-top: 8px;
+  }
+  
+  /* Responsive styles */
+  @media only screen and (max-width: 768px) {
+    .post-card {
+        flex-direction: column;
+        max-height: 100px; /* Adjust the height as needed */
+      }
+  
+    .post-card-img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  

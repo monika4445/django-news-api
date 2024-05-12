@@ -1,0 +1,27 @@
+<!-- news.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News</title>
+</head>
+<body>
+  {% for news in news_list %}
+    {% include "./news_card.html" %}
+    {% if forloop.last %}
+      {% if page_obj.has_next %}
+        {% if not page_obj.number|divisibleby:"3" %}
+          <div hx-get="{{ url }}?page={{ page_obj.number|add:1 }}" hx-trigger="revealed" hx-swap="outerHTML" hx-target="this" rel="next"></div>
+        {% endif %}
+        {% if page_obj.number|divisibleby:"3" %}
+          <div class="load-more">
+            <button class="load-more__btn" id="see-more-btn" hx-get="{{ url }}?page={{ page_obj.number|add:1 }}" hx-trigger="click" hx-swap="outerHTML" hx-target=".load-more" rel="next">Load More Posts</button>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</body>
+</html>

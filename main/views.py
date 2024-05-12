@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views import View
+from django.views import generic
 from .models import News, Tag
 import logging
 from .serializer import NewsSerializer
@@ -80,8 +81,6 @@ class NewsByIdList(View):
                 'news': serializer.data,
             }
 
-
-
             return render(request, 'news_article.html', context)
         except News.DoesNotExist as e:
             logger.error(f"News with id {pk} does not exist: {e}")
@@ -97,11 +96,12 @@ class NewsByIdList(View):
             return HttpResponse("News not found", status=404)
         
     
-class NewsByTagList(generics.ListAPIView):
-    serializer_class = NewsSerializer
+class NewsByTagList(generic.ListView):
+    template_name = 'news_by_tag.html'
+    context_object_name = 'news_list'  
 
     def get_queryset(self):
-        tag_name = self.kwargs['tag_name']
+        tag_name = self.kwargs.get('tag_name')
         tag = get_object_or_404(Tag, name=tag_name)
         return News.objects.filter(tags=tag)
 
